@@ -1,4 +1,4 @@
-SRC = main.c get_next_line.c get_next_line_utils.c ft_atoi.c ft_split.c
+SRC = main.c get_next_line.c get_next_line_utils.c ft_atoi.c ft_split.c parsing.c
 
 INCLUDES = ./includes
 CC = cc
