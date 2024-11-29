@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:40:46 by lsaiti            #+#    #+#             */
-/*   Updated: 2024/11/29 17:27:29 by lsaiti           ###   ########.fr       */
+/*   Updated: 2024/11/29 18:28:03 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int get_x(int x, int y)
 	double	i;
 
 	i = ((sqrt(2) / 2) * (y - x));
-	i *= 30;
+	i *= 40;
 	i += LARGEUR / 2;
 	return (int)(i);
 }
@@ -68,7 +68,7 @@ int	get_y(int x, int y, int z)
 	double	i;
 
 	i = ((1 / sqrt(6))* (x + y));
-	i *= 30;
+	i *= 40;
 	i += HAUTEUR / 2;
 	i -= (sqrt((double)2 / 3) * z);
 	return (int)(i);
@@ -149,9 +149,29 @@ map_utils	*map_init(void)
 	map_utils	*fdf;
 	
 	fdf = malloc(sizeof(map_utils));
+	if (!fdf)
+		exit (0);
 	fdf->mlx = mlx_init();
+	if (!fdf->mlx)
+	{
+		free(fdf);
+		exit (0);
+	}
 	fdf = map_parsing("./test_maps/42.fdf", fdf);
+	if (!fdf->map)
+	{
+		mlx_destroy_display(fdf->mlx);
+		free(fdf);
+		exit (0);
+	}
 	fdf->window = mlx_new_window(fdf->mlx, LARGEUR, HAUTEUR, "Fil de Fer");
+	if (!fdf->window)
+	{
+		mlx_destroy_display(fdf->mlx);
+		free_fdf(fdf);
+		free(fdf);
+		exit (0);
+	}
 	return (fdf);
 }
 
