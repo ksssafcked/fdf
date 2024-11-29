@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:40:46 by lsaiti            #+#    #+#             */
-/*   Updated: 2024/11/29 18:28:03 by lsaiti           ###   ########.fr       */
+/*   Updated: 2024/11/29 18:58:02 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,27 @@
 //     return (abs((int)iso_y));
 // }
 
-int get_x(int x, int y)
+int get_x(int x, int y, map_utils *fdf)
 {
 	double	i;
+	double	far;
 
+	far = (LARGEUR * 0.5) / fdf->width;
 	i = ((sqrt(2) / 2) * (y - x));
-	i *= 40;
-	i += LARGEUR / 2;
+	i *= far;
+	i += LARGEUR * 0.5;
 	return (int)(i);
 }
 
-int	get_y(int x, int y, int z)
+int	get_y(int x, int y, int z, map_utils *fdf)
 {
 	double	i;
+	double far;
 
+	far = (HAUTEUR * 0.8) / fdf->height;
 	i = ((1 / sqrt(6))* (x + y));
-	i *= 40;
-	i += HAUTEUR / 2;
+	i *= far;
+	i += HAUTEUR * 0.2;
 	i -= (sqrt((double)2 / 3) * z);
 	return (int)(i);
 }
@@ -88,19 +92,20 @@ void	draw_map(map_utils	*fdf)
 			if (fdf->map[i][j] == 0)
 			{
 				// printf("%d, %d\n", get_x(i, j) + 200 + (10 * i), get_y(i, j, 0) + 200);
-				mlx_pixel_put(fdf->mlx, fdf->window, get_x(i, j), get_y(i, j, 0), 0xFFFFFF);
+				mlx_pixel_put(fdf->mlx, fdf->window, get_x(i, j, fdf), get_y(i, j, fdf->map[i][j], fdf), 0xFFFFFF);
 			}
 			else
 			{
 				// printf("??%d, %d??\n", get_x(i, j) + 200 + (10 * j), get_y(i, j, 10));
 				// printf("??%d, %d??\n", get_x(i, j) + 200 + (10 * j), get_y(i, j, 0) + 200);
-				mlx_pixel_put(fdf->mlx, fdf->window, get_x(i, j), get_y(i, j, fdf->map[i][j]), 0xFF00FF);
+				mlx_pixel_put(fdf->mlx, fdf->window, get_x(i, j, fdf), get_y(i, j, fdf->map[i][j], fdf), 0xFF00FF);
 			}
 			j++;
 		}
 		i++;
 	}
 }
+
 
 void	free_fdf(map_utils *fdf)
 {
