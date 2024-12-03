@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:04:04 by lsaiti            #+#    #+#             */
-/*   Updated: 2024/11/29 17:42:13 by lsaiti           ###   ########.fr       */
+/*   Updated: 2024/12/03 18:40:32 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*ft_realloc(void **ptr, size_t size)
 	return (new_ptr);
 }
 
-char    **map_parser(char *file_name, int ***tab)
+char    **map_parser(char *file_name)
 {
 	char	**map;
 	char	*str;
@@ -87,7 +87,6 @@ char    **map_parser(char *file_name, int ***tab)
 		count++;
 	}
 	map[count] = NULL;
-	*tab = malloc((count + 1) * sizeof(int *));
 	close(fd);
 	return (map);
 }
@@ -103,6 +102,43 @@ void	free_str(char	**str)
 	free(str);
 }
 
+map_utils	*map_parsing(char *file_name, map_utils *fdf)
+{
+	char	**file;
+	char	**line;
+	int		i;
+	int		j;
+	
+	file = map_parser(file_name);
+	j = 0;
+	while (file[j])
+		j++;
+	fdf->height = j;
+	fdf->point = malloc(sizeof(t_point *) * (j + 1));
+	j = 0;
+	while (file[j])
+	{
+		line = ft_split(file[j], ' ');
+		i = 0;
+		while (line[i])
+			i++;
+		fdf->width = i;
+		fdf->point[j] = malloc((i+ 1) * sizeof(t_point));
+		i = 0;
+		while (line[i])
+		{
+			fdf->point[j][i] = get_pos(fdf, i, j, line[i]);
+			i++;
+		}
+		free_str(line);
+		j++;
+	}
+	free_str(file);
+	fdf->point[j] = NULL;
+	return (fdf);
+}
+
+/*
 map_utils	*map_parsing(char *file_name, map_utils *fdf)
 {
 	int		**map;
@@ -136,3 +172,4 @@ map_utils	*map_parsing(char *file_name, map_utils *fdf)
 	fdf->height = j;
 	return (fdf);
 }
+*/
